@@ -1,0 +1,43 @@
+version: 2
+
+semantic_models:
+  - name: orders
+    description: >- 
+      Fact table at the order level. This table contains one row per order and includes the order timestamp, 
+      as well as a set of foreign keys to join other entities
+    model: ref('bigquery_demo_project','fct_orders')
+    defaults:
+      agg_time_dimension: order_date
+    entities: # Entities included in the table are defined here. MetricFlow will use these columns as join keys.
+      - name: order
+        type: primary
+        expr: order_key
+      - name: customer
+        type: foreign
+        expr: customer_key
+    dimensions: # dimensions are qualitative values such as names, dates, or geographical data. They provide context to metrics and allow "metric by group" data slicing.
+      - name: order_date
+        type: time
+        type_params:
+          time_granularity: day
+      - name: status_code
+        type: categorical
+        expr: status_code
+      - name: priority_code
+        type: categorical
+        expr: priority_code
+
+
+    measures:
+      - name: gross_item_sales_amount
+        ## description: '{{ doc("gross_item_sales_amount") }}'
+        agg: sum
+
+      - name: net_item_sales_amount
+        ## description: '{{ doc("net_item_sales_amount") }}'
+        agg: sum
+
+      - name: median_net_sales
+        description: "the median net sales"
+        agg: median
+        expr: net_item_sales_amount
