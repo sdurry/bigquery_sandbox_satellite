@@ -11,6 +11,7 @@ with customers as (
 ), join__source_data as (
 
     select 
+        {{ dbt_utils.generate_surrogate_key(['order_date', 'region', 'nation', 'market_segment', 'status_code', ]) }} as id,
         orders.order_date,
         customers.region,
         customers.nation,
@@ -21,7 +22,7 @@ with customers as (
     from customers
     inner join orders 
         on orders.customer_key = customers.customer_key
-    {{ dbt_utils.group_by(5) }}
+    {{ dbt_utils.group_by(6) }}
 
 )
 

@@ -1,0 +1,23 @@
+models:
+  - name: ts_orders_by_region
+    description: a timeseries table to 
+    columns:
+      - name: id
+        description: the primary key of the table
+        test:
+          - unique
+          - not_null
+      - name: order_date
+        description: the data of the order
+      - name: region
+        description: the region name
+      - name: nation
+        description: the nation name
+      - name: market_segment
+        description: the market segment
+      - name: status_code
+        description: the status code
+      - name: order_count
+        description: number of orders
+      - name: net_item_sales_amount
+        description: the net total which factors in discount and tax
